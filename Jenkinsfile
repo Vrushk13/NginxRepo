@@ -1,14 +1,11 @@
 pipeline {
     agent any
 
-    stages {
+    environment {
+        PATH = "/usr/bin:/bin:/usr/local/bin"
+    }
 
-        stage('Clone Repository') {
-            steps {
-                git branch: 'main',
-                    url: 'https://github.com/Vrushk13/NginxRepo.git'
-            }
-        }
+    stages {
 
         stage('Build Docker Image') {
             steps {
@@ -27,8 +24,11 @@ pipeline {
 
         stage('Run NGINX Container') {
             steps {
-                sh 'docker run -d -p 9090:80 --name nginx-container nginx-jenkins'
+                sh '''
+                docker run -d -p 9090:80 --name nginx-container nginx-jenkins
+                '''
             }
         }
     }
 }
+
