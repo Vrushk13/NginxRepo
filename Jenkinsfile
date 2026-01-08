@@ -6,7 +6,6 @@ pipeline {
     }
 
     stages {
-
         stage('Build Docker Image') {
             steps {
                 sh 'docker build -t nginx-jenkins .'
@@ -24,11 +23,10 @@ pipeline {
 
         stage('Run NGINX Container') {
             steps {
-                sh '''
-                docker run -d -p 9090:80 --name nginx-container nginx-jenkins
-                '''
+                sh 'docker run -d -p 9090:80 --name nginx-container nginx-jenkins'
             }
         }
     }
 }
+
 
