@@ -3,33 +3,39 @@ pipeline {
 
     stages {
 
-        stage('Build Docker Image') {
+        stage('Check Docker') {
             steps {
                 sh '''
-                /usr/bin/docker --version
-                /usr/bin/docker build -t nginx-jenkins .
+                whoami
+                id
+                docker --version
                 '''
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                sh 'docker build -t nginx-jenkins .'
             }
         }
 
         stage('Stop Old Container') {
             steps {
                 sh '''
-                /usr/bin/docker stop nginx-container || true
-                /usr/bin/docker rm nginx-container || true
+                docker stop nginx-container || true
+                docker rm nginx-container || true
                 '''
             }
         }
 
         stage('Run NGINX Container') {
             steps {
-                sh '''
-                /usr/bin/docker run -d -p 9090:80 --name nginx-container nginx-jenkins
-                '''
+                sh 'docker run -d -p 9090:80 --name nginx-container nginx-jenkins'
             }
         }
     }
 }
+
 
 
 
