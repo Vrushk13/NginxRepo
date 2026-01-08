@@ -6,9 +6,13 @@ pipeline {
     }
 
     stages {
+
         stage('Build Docker Image') {
             steps {
-                sh 'docker build -t nginx-jenkins .'
+                sh '''
+                docker --version
+                docker build -t nginx-jenkins .
+                '''
             }
         }
 
@@ -23,10 +27,22 @@ pipeline {
 
         stage('Run NGINX Container') {
             steps {
-                sh 'docker run -d -p 9090:80 --name nginx-container nginx-jenkins'
+                sh '''
+                docker run -d -p 9090:80 --name nginx-container nginx-jenkins
+                '''
             }
         }
     }
+
+    post {
+        success {
+            echo "✅ NGINX Docker container deployed successfully"
+        }
+        failure {
+            echo "❌ Pipeline failed. Check Docker or Jenkins permissions"
+        }
+    }
 }
+
 
 
