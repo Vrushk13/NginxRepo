@@ -1,0 +1,12 @@
+version: 0.0
+os: linux
+
+files:
+  - source: /
+    destination: /home/ec2-user/nginx
+
+hooks:
+  BeforeInstall:
+    - location: scripts/stop.sh
+  AfterInstall:
+    - location: scripts/start.sh
